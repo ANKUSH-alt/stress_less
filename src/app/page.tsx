@@ -1,65 +1,107 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import React from 'react';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { 
+  Sparkles, 
+  ArrowRight, 
+  Brain, 
+  ShieldCheck, 
+  Heart,
+  MousePointer2
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
+export default function HomePage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div className="flex flex-col items-center justify-center min-h-[80vh] text-center space-y-12">
+      {/* Hero Section */}
+      <div className="space-y-6 max-w-4xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-primary/20 text-primary text-sm font-semibold mb-4"
+        >
+          <Sparkles className="w-4 h-4" />
+          <span>Award-winning AI Design</span>
+        </motion.div>
+        
+        <motion.h1 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+          className="text-5xl md:text-7xl font-extrabold tracking-tight"
+        >
+          Your Intelligent <br />
+          <span className="text-gradient">Stress Companion</span>
+        </motion.h1>
+        
+        <motion.p 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.4 }}
+          className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto font-medium"
+        >
+          Meet StressLess. Not just another app, but an emotionally intelligent 
+          living AI companion designed to understand, predict, and relieve 
+          your stress in real-time.
+        </motion.p>
+      </div>
+
+      {/* Buttons */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.6 }}
+        className="flex flex-col sm:flex-row gap-4 items-center"
+      >
+        <Link href="/dashboard">
+          <Button size="lg" className="rounded-2xl h-14 px-10 text-lg font-bold bg-primary hover:bg-primary/90 shadow-xl shadow-primary/20 group">
+            Get Started
+            <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </Button>
+        </Link>
+        <Link href="/chat">
+          <Button size="lg" variant="outline" className="rounded-2xl h-14 px-10 text-lg font-bold group">
+            Talk to AI
+            <Heart className="ml-2 w-5 h-5 text-rose-500 group-hover:scale-110 transition-transform" />
+          </Button>
+        </Link>
+      </motion.div>
+
+      {/* Feature Grid */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 0.8 }}
+        className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl mt-12"
+      >
+        {[
+          { label: "AI Stress Detection", icon: Brain, desc: "Real-time behavior learning." },
+          { label: "Human-Centered", icon: Heart, desc: "Built with DTL principles." },
+          { label: "Privacy First", icon: ShieldCheck, desc: "Your data stays yours." }
+        ].map((feat, i) => (
+          <div key={i} className="glass p-6 rounded-3xl border border-primary/5 hover:border-primary/20 transition-colors group">
+            <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+              <feat.icon className="w-6 h-6 text-primary" />
+            </div>
+            <h3 className="font-bold mb-2">{feat.label}</h3>
+            <p className="text-sm text-muted-foreground">{feat.desc}</p>
+          </div>
+        ))}
+      </motion.div>
+
+      {/* Scroll indicator */}
+      <motion.div 
+         animate={{ y: [0, 10, 0] }}
+         transition={{ duration: 2, repeat: Infinity }}
+         className="absolute bottom-12 flex flex-col items-center gap-2 opacity-50"
+      >
+        <MousePointer2 className="w-4 h-4" />
+        <span className="text-[10px] uppercase tracking-widest font-bold">Discover More</span>
+      </motion.div>
     </div>
   );
 }
