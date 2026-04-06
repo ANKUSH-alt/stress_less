@@ -53,4 +53,4 @@ StressLess is not just an app; it's a living AI companion that understands user 
 StressLess includes built-in crisis detection and clear disclaimers. It detects high-distress keywords and provides supportive resources while emphasizing that it is not a substitute for professional medical help.
 
 ## 📄 License
-MIT License. Built for the Design Thinking Lab (DTL).
+Ankush Gupta - Full Stack Developer and AI Developer. Built for the Design Thinking Lab (DTL).
