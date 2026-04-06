@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import Groq from 'groq-sdk';
 import { NextResponse } from 'next/server';
 import { detectCrisis } from '@/services/stressDetection';
 
@@ -14,18 +14,8 @@ type ChatPayload = {
   ageGroup?: string;
 };
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const genAI = GEMINI_API_KEY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null;
-const GEMINI_MODEL_CANDIDATES = [
-  'gemini-2.5-flash',
-  'gemini-flash-latest',
-  'gemini-2.0-flash',
-  'gemini-2.0-flash-lite',
-  'gemini-2.0-flash-001',
-  'gemini-2.0-flash-lite-001',
-  'gemini-1.5-flash-latest',
-  'gemini-1.5-flash',
-] as const;
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY || '' });
+const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.1-8b-instant';
 
 const crisisResponse =
   "It sounds like you're going through something really intense. You deserve immediate human support. If you might hurt yourself or are in danger, call your local emergency number right now. If you're in the U.S., call or text 988 for the Suicide & Crisis Lifeline.";
@@ -57,12 +47,10 @@ const parseAgeGroup = (value: string | undefined): AgeGroup => {
   return 'Adult';
 };
 
-const generateGeminiChatResponse = async (
+const generateGroqChatResponse = async (
   messages: ChatMessage[],
   ageGroup: AgeGroup
 ) => {
-  if (!genAI) return null;
-
   const systemPrompt = `
       You are StressLess AI, a calm, empathetic, and emotionally intelligent mental wellness assistant.
       Your tone should be: ${ageGroup === 'Senior' ? 'very clear, gentle, and respectful' : ageGroup === 'Teen' ? 'engaging, casual, and relatable' : 'professional yet warm and balanced'}.
@@ -72,46 +60,37 @@ const generateGeminiChatResponse = async (
       - Provide science-backed wellness tips (breathing, mindfulness, cognitive framing).
       - If user intensity is high (mentioning self-harm, extreme distress), provide safety resources and a disclaimer that you are not a medical professional.
       - Keep responses concise (2-3 suggestions max).
+      - Format your response using rich Markdown so it's easy to read. Use bolding for emphasis and bullet points for actionable steps.
       - DO NOT provide medical advice or diagnoses.
       
       CONTEXT:
       - The user is using the StressLess app to manage their daily stress.
     `;
 
-  const history = messages.slice(0, -1).map((m) => ({
-    role: m.role === 'assistant' ? 'model' : 'user',
-    parts: [{ text: m.content }],
+  const history: { role: 'user' | 'assistant'; content: string }[] = messages.slice(0, -1).map((m) => ({
+    role: m.role === 'assistant' ? 'assistant' : 'user',
+    content: m.content,
   }));
 
   const lastMessage = messages[messages.length - 1]?.content ?? '';
-  let lastError: unknown = null;
 
-  for (const modelName of GEMINI_MODEL_CANDIDATES) {
-    try {
-      const model = genAI.getGenerativeModel({ model: modelName });
-      const chat = model.startChat({
-        history: [
-          { role: 'user', parts: [{ text: systemPrompt }] },
-          {
-            role: 'model',
-            parts: [
-              {
-                text: 'Understood. I am StressLess AI, your empathetic wellness assistant. How can I support you today?',
-              },
-            ],
-          },
-          ...history,
-        ],
-      });
-      const result = await chat.sendMessage(lastMessage);
-      const response = await result.response;
-      return response.text();
-    } catch (error) {
-      lastError = error;
-    }
+  try {
+    const completion = await groq.chat.completions.create({
+      messages: [
+        { role: 'system', content: systemPrompt },
+        {
+          role: 'assistant',
+          content: 'Understood. I am StressLess AI, your empathetic wellness assistant. How can I support you today?',
+        },
+        ...history,
+        { role: 'user', content: lastMessage },
+      ],
+      model: GROQ_MODEL,
+    });
+    return completion.choices[0]?.message?.content || null;
+  } catch (error) {
+    throw error;
   }
-
-  throw lastError;
 };
 
 export async function POST(req: Request) {
@@ -131,13 +110,13 @@ export async function POST(req: Request) {
     const lastMessage = messages[messages.length - 1]?.content ?? '';
     lastMessageForFallback = lastMessage;
 
-    const text = await generateGeminiChatResponse(messages, ageGroup);
+    const text = await generateGroqChatResponse(messages, ageGroup);
 
     return NextResponse.json({ 
       content: text || fallbackReply(lastMessage)
     });
   } catch (error: unknown) {
-    console.error('Gemini Chat API Error:', error);
+    console.error('Groq Chat API Error:', error);
     return NextResponse.json({ content: fallbackReply(lastMessageForFallback) });
   }
 }

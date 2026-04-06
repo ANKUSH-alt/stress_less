@@ -1,22 +1,12 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import Groq from 'groq-sdk';
 import { NextResponse } from 'next/server';
 
 type ReflectPayload = {
   content?: string;
 };
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const genAI = GEMINI_API_KEY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null;
-const GEMINI_MODEL_CANDIDATES = [
-  'gemini-2.5-flash',
-  'gemini-flash-latest',
-  'gemini-2.0-flash',
-  'gemini-2.0-flash-lite',
-  'gemini-2.0-flash-001',
-  'gemini-2.0-flash-lite-001',
-  'gemini-1.5-flash-latest',
-  'gemini-1.5-flash',
-] as const;
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY || '' });
+const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.1-8b-instant';
 
 const buildFallbackReflection = (content: string) => {
   const words = content.trim().split(/\s+/);
@@ -24,32 +14,27 @@ const buildFallbackReflection = (content: string) => {
   return `You captured something important today: "${preview}${words.length > 14 ? '...' : ''}". A helpful next step is naming one feeling and one small action you can take in the next hour.`;
 };
 
-const generateGeminiReflection = async (content: string) => {
-  if (!genAI) return null;
-
+const generateGroqReflection = async (content: string) => {
   const prompt = `
       You are a wise, empathetic journaling assistant for the StressLess app.
       Analyze the following journal entry and provide a brief, supportive reflection (2-3 sentences).
       Focus on identifying emotional themes and providing a gentle, constructive insight to help the user manage stress.
+      Format your reflection using clean, concise Markdown (e.g., use bolding for emphasis or simple bullet points if suggesting actions) so the user can easily digest it.
       
       Journal Entry: "${content}"
       
       Reflection:
     `;
 
-  let lastError: unknown = null;
-  for (const modelName of GEMINI_MODEL_CANDIDATES) {
-    try {
-      const model = genAI.getGenerativeModel({ model: modelName });
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      return response.text().trim();
-    } catch (error) {
-      lastError = error;
-    }
+  try {
+    const completion = await groq.chat.completions.create({
+      messages: [{ role: 'user', content: prompt }],
+      model: GROQ_MODEL,
+    });
+    return completion.choices[0]?.message?.content?.trim() || null;
+  } catch (error) {
+    throw error;
   }
-
-  throw lastError;
 };
 
 export async function POST(req: Request) {
@@ -65,11 +50,11 @@ export async function POST(req: Request) {
       );
     }
 
-    const text = await generateGeminiReflection(content);
+    const text = await generateGroqReflection(content);
 
     return NextResponse.json({ reflection: text || buildFallbackReflection(content) });
   } catch (error: unknown) {
-    console.error('Gemini Journal API Error:', error);
+    console.error('Groq Journal API Error:', error);
     return NextResponse.json({ reflection: buildFallbackReflection(rawContent) });
   }
 }

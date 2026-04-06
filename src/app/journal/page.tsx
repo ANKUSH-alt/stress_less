@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import ReactMarkdown from 'react-markdown';
 
 type JournalEntry = {
   id: string;
@@ -181,7 +182,24 @@ export default function JournalPage() {
                   </div>
                   <h3 className="font-bold text-amber-800 dark:text-amber-200">AI Personal Insight</h3>
                 </div>
-                <p className="text-sm text-muted-foreground leading-relaxed italic">{reflection}</p>
+                <div className="text-sm text-muted-foreground leading-relaxed italic">
+                  <ReactMarkdown
+                    components={{
+                      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                      p: ({node: _node, ...props}: {node?: unknown} & React.HTMLProps<HTMLParagraphElement>) => <p {...props} className="mb-3 last:mb-0" />,
+                      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                      ul: ({node: _node, ...props}: {node?: unknown} & React.HTMLProps<HTMLUListElement>) => <ul {...props} className="list-disc ml-4 mb-3 mt-1 space-y-1 not-italic" />,
+                      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                      ol: ({node: _node, type, ...props}: {node?: unknown; type?: string} & React.HTMLProps<HTMLOListElement>) => <ol type={type as "1" | "a" | "i" | "A" | "I" | undefined} {...props} className="list-decimal ml-4 mb-3 mt-1 space-y-1 not-italic" />,
+                      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                      li: ({node: _node, ...props}: {node?: unknown} & React.HTMLProps<HTMLLIElement>) => <li {...props} className="leading-relaxed" />,
+                      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                      strong: ({node: _node, ...props}: {node?: unknown} & React.HTMLProps<HTMLElement>) => <strong {...props} className="font-semibold" />
+                    }}
+                  >
+                    {reflection}
+                  </ReactMarkdown>
+                </div>
                 <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full -mr-16 -mt-16 blur-3xl" />
               </motion.div>
             )}

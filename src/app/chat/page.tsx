@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { readUserPrefs, saveUserPrefs } from '@/lib/prefs';
+import ReactMarkdown from 'react-markdown';
 
 type Message = {
   role: 'user' | 'assistant';
@@ -147,7 +148,26 @@ export default function ChatPage() {
                   ? "bg-primary text-primary-foreground rounded-tr-none" 
                   : "glass border border-primary/10 rounded-tl-none"
               )}>
-                {m.content}
+                {m.role === 'assistant' ? (
+                  <ReactMarkdown 
+                    components={{
+                      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                      p: ({node: _node, ...props}: {node?: unknown} & React.HTMLProps<HTMLParagraphElement>) => <p {...props} className="mb-4 last:mb-0" />,
+                      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                      ul: ({node: _node, ...props}: {node?: unknown} & React.HTMLProps<HTMLUListElement>) => <ul {...props} className="list-disc ml-4 mb-4 mt-2 space-y-1" />,
+                      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                      ol: ({node: _node, type, ...props}: {node?: unknown; type?: string} & React.HTMLProps<HTMLOListElement>) => <ol type={type as "1" | "a" | "i" | "A" | "I" | undefined} {...props} className="list-decimal ml-4 mb-4 mt-2 space-y-1" />,
+                      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                      li: ({node: _node, ...props}: {node?: unknown} & React.HTMLProps<HTMLLIElement>) => <li {...props} className="leading-relaxed" />,
+                      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                      strong: ({node: _node, ...props}: {node?: unknown} & React.HTMLProps<HTMLElement>) => <strong {...props} className="font-semibold" />
+                    }}
+                  >
+                    {m.content}
+                  </ReactMarkdown>
+                ) : (
+                  m.content
+                )}
               </div>
             </motion.div>
           ))}
