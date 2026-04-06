@@ -355,20 +355,22 @@ export default function RelaxationPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div
           ref={breathingRef}
-          className="lg:col-span-2 glass p-10 rounded-[3rem] border border-primary/10 relative overflow-hidden"
+          className="lg:col-span-2 glass p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] border border-primary/10 relative overflow-hidden"
         >
-          <div className="absolute top-8 left-10 flex items-center gap-2">
-            <Wind className="w-5 h-4 text-primary" />
-            <span className="text-xs font-bold uppercase tracking-widest text-primary">Guided Breathing</span>
+          <div className="absolute top-4 left-4 md:top-8 md:left-10 flex items-center gap-2">
+            <Wind className="w-4 h-4 md:w-5 md:h-4 text-primary" />
+            <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-primary">Guided Breathing</span>
           </div>
           {activeMeditation && (
-            <div className="absolute top-6 right-6 max-w-[45%] rounded-2xl border border-primary/20 bg-primary/10 px-4 py-2 text-right">
-              <p className="text-[10px] uppercase tracking-widest text-primary/70 font-semibold">Session Loaded</p>
-              <p className="text-sm font-bold">{activeMeditation.title}</p>
-              <p className="text-[11px] text-muted-foreground">{activeMeditation.duration}</p>
+            <div className="absolute top-4 right-4 md:top-6 md:right-6 max-w-[55%] md:max-w-[45%] rounded-2xl border border-primary/20 bg-primary/10 px-3 py-2 md:px-4 md:py-2 text-right">
+              <p className="text-[9px] md:text-[10px] uppercase tracking-widest text-primary/70 font-semibold line-clamp-1">Session Loaded</p>
+              <p className="text-xs md:text-sm font-bold line-clamp-1">{activeMeditation.title}</p>
+              <p className="text-[10px] md:text-[11px] text-muted-foreground">{activeMeditation.duration}</p>
             </div>
           )}
-          <BreathingCircle />
+          <div className="mt-8 md:mt-0">
+            <BreathingCircle />
+          </div>
         </div>
 
         <div className="space-y-6">

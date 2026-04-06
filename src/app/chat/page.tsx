@@ -82,9 +82,9 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex flex-col h-[75vh] max-w-4xl mx-auto space-y-4">
+    <div className="flex flex-col h-[calc(100vh-[140px])] md:h-[75vh] max-w-4xl mx-auto space-y-4">
       {/* Header & Personalization */}
-      <div className="flex flex-col md:flex-row justify-between items-center glass p-4 rounded-2xl border border-primary/10 gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center glass p-4 rounded-2xl border border-primary/10 gap-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center text-primary">
             <Bot className="w-6 h-6" />
@@ -98,7 +98,7 @@ export default function ChatPage() {
           </div>
         </div>
 
-        <div className="flex gap-2 p-1 bg-muted/30 rounded-xl border border-border/40">
+        <div className="flex flex-wrap gap-2 p-1 bg-muted/30 rounded-xl border border-border/40 w-full md:w-auto">
           {(['Teen', 'Adult', 'Senior'] as AgeGroup[]).map((group) => (
             <button
               key={group}
@@ -123,7 +123,7 @@ export default function ChatPage() {
       {/* Chat area */}
       <div 
         ref={scrollRef}
-        className="flex-1 glass rounded-3xl p-6 overflow-y-auto space-y-6 border border-primary/5 scrollbar-hide"
+        className="flex-1 glass rounded-3xl p-4 md:p-6 overflow-y-auto space-y-6 border border-primary/5 scrollbar-hide"
       >
         <AnimatePresence>
           {messages.map((m, idx) => (
@@ -132,7 +132,7 @@ export default function ChatPage() {
               initial={{ opacity: 0, y: 10, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               className={cn(
-                "flex gap-4 max-w-[85%]",
+                "flex gap-3 md:gap-4 max-w-[95%] md:max-w-[85%]",
                 m.role === 'user' ? "ml-auto flex-row-reverse" : ""
               )}
             >
@@ -190,7 +190,7 @@ export default function ChatPage() {
       </div>
 
       {/* Input area */}
-      <div className="relative group">
+      <div className="relative group shrink-0">
         <Input 
           value={input}
           onChange={(e) => setInput(e.target.value)}

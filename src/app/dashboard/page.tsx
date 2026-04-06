@@ -103,8 +103,8 @@ export default function DashboardPage() {
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="glass p-10 rounded-[2.5rem] flex flex-col items-center justify-center border border-primary/10 relative overflow-hidden group">
-          <div className="absolute top-4 right-6">
+        <div className="glass p-6 md:p-10 rounded-[2rem] md:rounded-[2.5rem] flex flex-col items-center justify-center border border-primary/10 relative overflow-hidden group">
+          <div className="absolute top-4 right-4 md:right-6">
             <TrendingUp className="w-6 h-6 text-primary/40 group-hover:text-primary transition-colors" />
           </div>
           <StressScore score={stressResult.score} />
@@ -130,10 +130,10 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 w-full">
           <MoodTracker value={mood} onChange={handleMoodChange} />
 
-          <div className="flex-1 glass p-8 rounded-3xl border border-primary/10 relative overflow-hidden">
+          <div className="flex-1 glass p-6 md:p-8 rounded-3xl border border-primary/10 relative overflow-hidden">
             <div className="flex items-center gap-2 mb-6">
               <Sparkles className="w-5 h-5 text-amber-500 fill-amber-500/20" />
               <h3 className="text-lg font-bold">AI Companion Suggests</h3>

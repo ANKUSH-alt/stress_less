@@ -32,7 +32,7 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
-          className="text-5xl md:text-7xl font-extrabold tracking-tight"
+          className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight"
         >
           Your Intelligent <br />
           <span className="text-gradient">Stress Companion</span>
@@ -42,7 +42,7 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.4 }}
-          className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto font-medium"
+          className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto font-medium px-4"
         >
           Meet StressLess. Not just another app, but an emotionally intelligent 
           living AI companion designed to understand, predict, and relieve 
@@ -55,16 +55,16 @@ export default function HomePage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.6 }}
-        className="flex flex-col sm:flex-row gap-4 items-center"
+        className="flex flex-col sm:flex-row gap-4 items-center w-full px-8 sm:px-0 sm:w-auto"
       >
-        <Link href="/dashboard">
-          <Button size="lg" className="rounded-2xl h-14 px-10 text-lg font-bold bg-primary hover:bg-primary/90 shadow-xl shadow-primary/20 group">
+        <Link href="/dashboard" className="w-full sm:w-auto">
+          <Button size="lg" className="w-full sm:w-auto rounded-2xl h-14 px-10 text-lg font-bold bg-primary hover:bg-primary/90 shadow-xl shadow-primary/20 group">
             Get Started
             <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Button>
         </Link>
-        <Link href="/chat">
-          <Button size="lg" variant="outline" className="rounded-2xl h-14 px-10 text-lg font-bold group">
+        <Link href="/chat" className="w-full sm:w-auto">
+          <Button size="lg" variant="outline" className="w-full sm:w-auto rounded-2xl h-14 px-10 text-lg font-bold group">
             Talk to AI
             <Heart className="ml-2 w-5 h-5 text-rose-500 group-hover:scale-110 transition-transform" />
           </Button>

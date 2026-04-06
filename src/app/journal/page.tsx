@@ -112,14 +112,14 @@ export default function JournalPage() {
   const recentEntries = useMemo(() => entries.slice(0, 6), [entries]);
 
   return (
-    <div className="max-w-5xl mx-auto space-y-10 pb-20">
-      <header className="flex justify-between items-center">
+    <div className="max-w-5xl mx-auto space-y-10 pb-20 px-2 sm:px-0">
+      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">AI Reflection Journal</h1>
           <p className="text-muted-foreground mt-1">Transform your thoughts into clarity.</p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" className="rounded-xl" onClick={clearHistory} disabled={!entries.length}>
+        <div className="flex gap-2 w-full md:w-auto">
+          <Button variant="outline" className="rounded-xl w-full md:w-auto" onClick={clearHistory} disabled={!entries.length}>
             <Layers className="w-4 h-4 mr-2" />
             {entries.length ? 'Clear History' : 'History Empty'}
           </Button>
@@ -128,7 +128,7 @@ export default function JournalPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-6">
-          <div className="glass p-8 rounded-[2.5rem] border border-primary/10 relative overflow-hidden">
+          <div className="glass p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-primary/10 relative overflow-hidden">
             <div className="flex items-center gap-2 mb-6">
               <Calendar className="w-5 h-5 text-primary" />
               <span className="text-sm font-bold uppercase tracking-widest text-primary">{"Today's Entry"}</span>
@@ -138,14 +138,14 @@ export default function JournalPage() {
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder={"What's on your mind? No filters, just flow..."}
-              className="min-h-[350px] bg-transparent border-none focus-visible:ring-0 text-lg leading-relaxed resize-none p-0 placeholder:text-muted-foreground/40"
+              className="min-h-[250px] md:min-h-[350px] bg-transparent border-none focus-visible:ring-0 text-base md:text-lg leading-relaxed resize-none p-0 placeholder:text-muted-foreground/40"
             />
 
-            <div className="mt-8 flex flex-wrap justify-end gap-3">
+            <div className="mt-8 flex flex-col sm:flex-row justify-end gap-3">
               <Button
                 onClick={handleAnalyze}
                 disabled={!content.trim() || isAnalyzing}
-                className="rounded-2xl h-14 px-8 font-bold shadow-lg shadow-primary/20 gap-2"
+                className="rounded-2xl h-14 px-8 font-bold shadow-lg shadow-primary/20 gap-2 w-full sm:w-auto"
               >
                 {isAnalyzing ? (
                   <>
@@ -161,7 +161,7 @@ export default function JournalPage() {
                 variant="outline"
                 onClick={handleSaveEntry}
                 disabled={!content.trim()}
-                className="rounded-2xl h-14 px-8 font-bold gap-2"
+                className="rounded-2xl h-14 px-8 font-bold gap-2 w-full sm:w-auto"
               >
                 <Save className="w-5 h-5" /> Save Entry
               </Button>
@@ -174,7 +174,7 @@ export default function JournalPage() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="glass p-8 rounded-3xl border border-amber-500/20 bg-amber-500/5 relative overflow-hidden group"
+                className="glass p-6 md:p-8 rounded-3xl border border-amber-500/20 bg-amber-500/5 relative overflow-hidden group"
               >
                 <div className="flex items-center gap-3 mb-4">
                   <div className="p-2 bg-amber-500/10 rounded-lg">
